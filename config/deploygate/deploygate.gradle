@@ -1,0 +1,16 @@
+apply plugin: "deploygate"
+
+deploygate {
+    userName = System.properties['deploygateUsername']
+    token    = System.properties['deploygateToken']
+
+    apks {
+        fastDevelopDebug {
+            message = """
+                VERSION: ${VERSION}
+                VERSION_CODE: ${VERSION_CODE}
+                Commit: "testtesttest"
+            """
+        }
+    }
+}
