@@ -1,0 +1,18 @@
+apply plugin: 'findbugs'
+
+check.dependsOn 'findbugs'
+
+task findbugs(type: FindBugs) {
+	ignoreFailures = true
+	effort = "max"
+	reportLevel = "low"
+	includeFilter = new File("${project.rootDir}/config/findbugs/sonarqube_include_filter.xml")
+	classes = files("build/intermediates/classes/")
+	source 'src'
+	include '**/*.java'
+	exclude '**/gen/**', '**/test/**', '**/androidTest/**'
+	reports {
+		xml.enabled = true
+	}
+	classpath = files()
+}

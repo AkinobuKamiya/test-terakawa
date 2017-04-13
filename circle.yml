@@ -1,0 +1,35 @@
+#general:
+#  branches:
+#    only:
+#      - develop
+#  artifacts:
+#      - "app/build/outputs/apk/app-debug.apk"
+#      - "app/build/outputs/apk/app-release-unsigned.apk"
+machine:
+  timezone: Asia/Tokyo
+  java:
+    version: oraclejdk8
+  environment:
+    ANDROID_HOME: /usr/local/android-sdk-linux
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "android-25,build-tools-25.0.2"
+    - ANDROID_HOME=/usr/local/android-sdk-linux
+    - mkdir "$ANDROID_HOME/licenses" || true
+    - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+    - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+    - echo -e "\nd975f751698a77b662f1254ddbeed3901e976f5a" > "$ANDROID_HOME/licenses/intel-android-extra-license"
+test:
+  override:
+    - echo "Nothing to do here"
+deployment:
+  develop:
+    branch: develop
+    commands:
+      - ./gradlew assembleDebug
+      - aws s3 cp app/build/outputs/apk/app-debug.apk s3://rls-smd/test/debug/$CIRCLE_BUILD_NUM/
+  master:
+    branch: master
+    commands:
+      - ./gradlew assembleRelease
+      - aws s3 cp app/build/outputs/apk/app-release-unsigned.apk s3://rls-smd/test/release/$CIRCLE_BUILD_NUM/
