@@ -28,10 +28,10 @@ deployment:
   develop:
     branch: develop
     commands:
-      - gradlew assembleDebug
+      - ./gradlew assembleDebug
 #      - aws s3 cp app/build/outputs/apk/app-debug.apk s3://rls-smd/test/debug/$CIRCLE_BUILD_NUM/
   master:
     branch: master
     commands:
-      - gradlew assembleRelease
+      - ./gradlew assembleRelease
 #      - aws s3 cp app/build/outputs/apk/app-release-unsigned.apk s3://rls-smd/test/release/$CIRCLE_BUILD_NUM/
